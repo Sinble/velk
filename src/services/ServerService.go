@@ -38,14 +38,14 @@ func (serverService *ServerService) ConnectionLoop() {
 		if err != nil {
 			fmt.Println()
 		}
-		player := structs.Player{Connection: connection, Reader:bufio.NewReader(connection)}
-		infrastructure.Players = append(infrastructure.Players, player)
+		player := &structs.Player{Connection: connection, Reader:bufio.NewReader(connection)}
+		serverService.PlayerService.AddPlayer(player)
 
 		go serverService.PlayerGameLoop(player)
 	}
 }
 
-func (serverService *ServerService) PlayerGameLoop(player structs.Player) {
+func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 
 	serverService.PlayerService.SendToPlayer(player, "Welcome to Velk\r\nWhat is thy name?")
 	name, err := serverService.PlayerService.ReadFromPlayer(player)

@@ -1,7 +1,7 @@
 package structs
 
 type Command struct {
-	Player        Player
+	Player        *Player
 	CommandName   string
 	CommandSuffix string
 }

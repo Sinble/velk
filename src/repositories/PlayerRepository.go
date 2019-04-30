@@ -9,8 +9,8 @@ type PlayerRepository struct {
 
 }
 
-func (repository *PlayerRepository) GetPlayers() ([]structs.Player, error){
-	var players []structs.Player
+func (repository *PlayerRepository) GetPlayers() ([]*structs.Player, error){
+	var players []*structs.Player
 
 	for _, value := range infrastructure.Players {
 		players = append(players, value)
@@ -19,7 +19,7 @@ func (repository *PlayerRepository) GetPlayers() ([]structs.Player, error){
 	return players, nil
 }
 
-func (repository *PlayerRepository) GetPlayer(id int) (structs.Player, error) {
+func (repository *PlayerRepository) GetPlayer(id int) (*structs.Player, error) {
 	player, playerExists := infrastructure.Players[id]
 
 	if !playerExists {
@@ -31,7 +31,10 @@ func (repository *PlayerRepository) GetPlayer(id int) (structs.Player, error) {
 
 
 
-func (repository *PlayerRepository) AddPlayer(player structs.Player) error {
+func (repository *PlayerRepository) AddPlayer(player *structs.Player) error {
+
+	player.Id = infrastructure.PlayerCount
+	infrastructure.PlayerCount++
 	infrastructure.Players[player.Id] = player
 
 	return nil
