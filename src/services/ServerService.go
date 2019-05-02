@@ -36,10 +36,10 @@ func (serverService *ServerService) ConnectionLoop() {
 		connection, err := infrastructure.Server.Listener.Accept()
 
 		if err != nil {
-			fmt.Println()
+			logrus.Error(err)
+			return
 		}
 		player := &structs.Player{Connection: connection, Reader:bufio.NewReader(connection)}
-
 
 		go serverService.PlayerGameLoop(player)
 	}
@@ -53,6 +53,7 @@ func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 
 	if err != nil {
 		logrus.Error("Failed to read name", err)
+		return
 	}
 
 	player.Name = name
@@ -65,6 +66,7 @@ func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 		if err != nil {
 			logrus.Error("Failed to receive commandName: ", err)
 			player.Connection.Close()
+			serverService.PlayerService.RemovePlayer(player.Id)
 			return
 		}
 

@@ -14,12 +14,12 @@ func main() {
 	infrastructure.CommandList = make(map[string]interfaces.CommandInterface)
 	infrastructure.CommandList["say"] = &commands.Say{}
 	infrastructure.CommandList["who"] = &commands.Who{}
+	infrastructure.CommandList["shutdown"] = &commands.Shutdown{}
 
 	infrastructure.Server = &structs.Server{}
 	serviceService := services.ServerService{}
 	serviceService.Init()
-	go serviceService.ConnectionLoop()
-	serviceService.CommandConsumer()
-
+	go serviceService.CommandConsumer()
+	serviceService.ConnectionLoop()
 
 }
