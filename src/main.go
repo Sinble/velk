@@ -13,6 +13,7 @@ import (
 func main() {
 	infrastructure.CommandList = make(map[string]interfaces.CommandInterface)
 	infrastructure.CommandList["say"] = &commands.Say{}
+	infrastructure.CommandList["who"] = &commands.Who{}
 
 	infrastructure.Server = &structs.Server{}
 	serviceService := services.ServerService{}

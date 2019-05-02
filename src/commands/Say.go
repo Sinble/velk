@@ -17,16 +17,10 @@ func (say *Say) Action(player *structs.Player, command string, commandOptions ..
 		message = commandOptions[0]
 	}
 	sendMessage := fmt.Sprintf("%s says, \"%s\"\r\n", player.Name, message)
-	players, err := say.PlayerService.GetPlayers()
+
+	err := say.PlayerService.SendToAllPlayers(sendMessage)
 	if err != nil {
 		logrus.Error(err)
 	}
-	say.SendToAllPlayers(players, sendMessage)
 }
 
-func (say *Say) SendToAllPlayers(players []*structs.Player, message string)  {
-
-	for _, player := range players {
-		say.PlayerService.SendToPlayer(player, message)
-	}
-}

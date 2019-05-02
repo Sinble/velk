@@ -32,6 +32,18 @@ func (service PlayerService) SendToPlayer(player *structs.Player, message string
 	return err
 }
 
+func (service PlayerService) SendToAllPlayers(message string) error {
+
+	players, err := service.GetPlayers()
+	if err != nil {
+		return err
+	}
+	for _, player := range players {
+		service.SendToPlayer(player, message)
+	}
+	return nil
+}
+
 func (service PlayerService) ReadFromPlayer(player *structs.Player) (string, error) {
 	message, err := player.Reader.ReadString('\n')
 	if err != nil {
@@ -39,4 +51,5 @@ func (service PlayerService) ReadFromPlayer(player *structs.Player) (string, err
 	}
 	return message[:len(message)-2], nil
 }
+
 

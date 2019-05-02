@@ -39,7 +39,7 @@ func (serverService *ServerService) ConnectionLoop() {
 			fmt.Println()
 		}
 		player := &structs.Player{Connection: connection, Reader:bufio.NewReader(connection)}
-		serverService.PlayerService.AddPlayer(player)
+
 
 		go serverService.PlayerGameLoop(player)
 	}
@@ -50,12 +50,14 @@ func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 	serverService.PlayerService.SendToPlayer(player, "Welcome to Velk\r\nWhat is thy name?")
 	name, err := serverService.PlayerService.ReadFromPlayer(player)
 
+
 	if err != nil {
 		logrus.Error("Failed to read name", err)
 	}
 
 	player.Name = name
-
+	serverService.PlayerService.SendToAllPlayers(fmt.Sprintf("%s has joined the server\r\n", player.Name))
+	serverService.PlayerService.AddPlayer(player)
 	//Room.AddPlayer(player)
 	for {
 		commandString, err := serverService.PlayerService.ReadFromPlayer(player)
