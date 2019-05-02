@@ -15,6 +15,7 @@ func main() {
 	infrastructure.CommandList["say"] = &commands.Say{}
 	infrastructure.CommandList["who"] = &commands.Who{}
 	infrastructure.CommandList["shutdown"] = &commands.Shutdown{}
+	infrastructure.CommandList["quit"] = &commands.Quit{}
 
 	infrastructure.Server = &structs.Server{}
 	serviceService := services.ServerService{}
