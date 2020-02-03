@@ -7,7 +7,7 @@ import (
 
 var Server *structs.Server
 
-var Rooms map[int]structs.Room
+var Zones map[int]*structs.Zone
 var PlayerCount int
 var Players  map[int]*structs.Player
 var CommandList map[string]interfaces.CommandInterface
@@ -15,5 +15,6 @@ var CommandList map[string]interfaces.CommandInterface
 func init() {
 	PlayerCount = 0
 	Players = make(map[int]*structs.Player)
+	Zones = make(map[int]*structs.Zone)
 }
 

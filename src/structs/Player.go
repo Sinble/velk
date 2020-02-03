@@ -10,5 +10,5 @@ type Player struct {
 	Name string
 	Connection net.Conn
 	Reader *bufio.Reader
-	Room Room
+	Room *Room
 }

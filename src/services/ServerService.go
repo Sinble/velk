@@ -7,11 +7,13 @@ import (
 	"net"
 	"strings"
 	"velk/src/infrastructure"
+	"velk/src/repositories"
 	"velk/src/structs"
 )
 
 type ServerService struct {
 	PlayerService PlayerService
+	WorldRepository repositories.WorldRepository
 }
 
 
@@ -28,6 +30,9 @@ func (serverService *ServerService) Init() {
 
 	infrastructure.Server.Listener = listener
 	infrastructure.Server.PlayerCommandChannel = make(chan structs.Command)
+
+	zone := serverService.WorldRepository.CreateZone("Sinble")
+	serverService.WorldRepository.CreateRoom(zone.Id)
 
 }
 
@@ -59,6 +64,12 @@ func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 	player.Name = name
 	serverService.PlayerService.SendToAllPlayers(fmt.Sprintf("%s has joined the server\r\n", player.Name))
 	serverService.PlayerService.AddPlayer(player)
+	room, err := serverService.WorldRepository.GetRoom("1-1")
+	if err !=nil {
+		logrus.Error(err)
+	}
+	player.Room = room
+	room.Players = append(room.Players, player)
 	//Room.AddPlayer(player)
 	for {
 		commandString, err := serverService.PlayerService.ReadFromPlayer(player)
