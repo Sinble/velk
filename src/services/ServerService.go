@@ -32,7 +32,10 @@ func (serverService *ServerService) Init() {
 	infrastructure.Server.PlayerCommandChannel = make(chan structs.Command)
 
 	zone := serverService.WorldRepository.CreateZone("Sinble")
-	serverService.WorldRepository.CreateRoom(zone.Id)
+	room1 := serverService.WorldRepository.CreateRoom(zone.Id)
+	room2 := serverService.WorldRepository.CreateRoom(zone.Id)
+	room1.NorthExit = room2
+	room2.SouthExit = room1
 
 }
 
@@ -52,9 +55,8 @@ func (serverService *ServerService) ConnectionLoop() {
 
 func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 
-	serverService.PlayerService.SendToPlayer(player, "Welcome to Velk\r\nWhat is thy name?")
-	name, err := serverService.PlayerService.ReadFromPlayer(player)
-
+	player.SendToPlayer("Welcome to Velk\r\nWhat is thy name?")
+	name, err := player.ReadFromPlayer()
 
 	if err != nil {
 		logrus.Error("Failed to read name", err)
@@ -69,10 +71,10 @@ func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 		logrus.Error(err)
 	}
 	player.Room = room
-	room.Players = append(room.Players, player)
+	room.AddPlayer(player)
 	//Room.AddPlayer(player)
 	for {
-		commandString, err := serverService.PlayerService.ReadFromPlayer(player)
+		commandString, err := player.ReadFromPlayer()
 
 		if err != nil {
 			logrus.Error("Failed to receive commandName: ", err)
@@ -95,7 +97,7 @@ func (serverService *ServerService) CommandConsumer() {
 		if actionExists {
 			action.Action(command.Player, command.CommandName, command.CommandSuffix)
 		} else {
-			serverService.PlayerService.SendToPlayer(command.Player,"Huh?\r\n")
+			command.Player.SendToPlayer("Huh?\r\n")
 		}
 
 	}

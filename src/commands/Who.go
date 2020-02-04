@@ -21,7 +21,7 @@ func (who *Who) Action(player *structs.Player, command string, commandOptions ..
 		sendMessage += fmt.Sprintf("%s\r\n", player.Name)
 	}
 	sendMessage += "------------------------------------------------------------\r\n"
-	sendMessage += fmt.Sprintf("Total Players: %d\r\n", len(players))
-	who.PlayerService.SendToPlayer(player, sendMessage)
+	sendMessage += fmt.Sprintf("Total players: %d\r\n", len(players))
+	player.SendToPlayer(sendMessage)
 }
 

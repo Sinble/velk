@@ -37,22 +37,9 @@ func (repository *WorldRepository) CreateZone(creator string) *structs.Zone {
 
 func (repository *WorldRepository) CreateRoom(zoneId int) *structs.Room {
 	roomId := len(infrastructure.Zones[zoneId].Rooms) + 1
-	room := &structs.Room{
-		Id:          roomId,
-		Name:        "A room",
-		Description: "A plain looking room",
-		Players:     make([]*structs.Player, 0),
-		NorthExitId: "",
-		EastExitId:  "",
-		SouthExitId: "",
-		WestExitId:  "",
-		NorthExit:   nil,
-		EastExit:    nil,
-		SouthExit:   nil,
-		WestExit:    nil,
-	}
-	infrastructure.Zones[zoneId].Rooms[roomId] = room
-	return room
+	room := structs.Room{}.New(roomId)
+	infrastructure.Zones[zoneId].Rooms[roomId] = &room
+	return &room
 }
 
 func (repository *WorldRepository) GetRoom(id string) (*structs.Room, error) {
@@ -91,7 +78,7 @@ func (repository *WorldRepository) GetRoom(id string) (*structs.Room, error) {
 //
 //	player.Id = infrastructure.PlayerCount
 //	infrastructure.PlayerCount++
-//	infrastructure.Players[player.Id] = player
+//	infrastructure.players[player.Id] = player
 //
 //	return nil
 //}

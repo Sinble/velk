@@ -5,17 +5,17 @@ type RoomService struct {
 }
 
 //func (room *RoomService) AddPlayer(playerInterface interfaces.PlayerInterface) {
-//	room.Players = append(room.Players, playerInterface)
+//	room.players = append(room.players, playerInterface)
 //}
 //
 //func (room *RoomService) RemovePlayer(playerInterface interfaces.PlayerInterface) {
-//	for index, player := range room.Players {
+//	for index, player := range room.players {
 //		if playerInterface.GetName() == player.GetName() {
-//			room.Players = append(room.Players[:index], room.Players[index+1:]...)
+//			room.players = append(room.players[:index], room.players[index+1:]...)
 //		}
 //	}
 //}
 //
 //func (room *RoomService) GetPlayers() []interfaces.PlayerInterface {
-//	return room.Players
+//	return room.players
 //}

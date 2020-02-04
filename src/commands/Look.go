@@ -10,12 +10,16 @@ type Look struct {
 	PlayerService services.PlayerService
 }
 
-func (look *Look) Action(player *structs.Player, command string, commandOptions ...string) {
+func (a *Look) Action(player *structs.Player, command string, commandOptions ...string) {
+	CmdLook(player)
+}
+
+func CmdLook(player *structs.Player) {
 	sendMessage := fmt.Sprintf("%s\r\n", player.Room.Name)
 	sendMessage += fmt.Sprintf("%s\r\n", player.Room.Description)
-	for _, player := range player.Room.Players {
+	for _, player := range player.Room.GetPlayers() {
 		sendMessage += fmt.Sprintf("%s\r\n", player.Name)
 	}
 
-	look.PlayerService.SendToPlayer(player, sendMessage)
+	player.SendToPlayer(sendMessage)
 }

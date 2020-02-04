@@ -17,6 +17,10 @@ func main() {
 	infrastructure.CommandList["shutdown"] = &commands.Shutdown{}
 	infrastructure.CommandList["quit"] = &commands.Quit{}
 	infrastructure.CommandList["look"] = &commands.Look{}
+	infrastructure.CommandList["north"] = &commands.Move{}
+	infrastructure.CommandList["east"] = &commands.Move{}
+	infrastructure.CommandList["south"] = &commands.Move{}
+	infrastructure.CommandList["west"] = &commands.Move{}
 
 	infrastructure.Server = &structs.Server{}
 	serviceService := services.ServerService{}
