@@ -2,8 +2,10 @@ package structs
 
 import (
 	"bufio"
-	"github.com/sirupsen/logrus"
 	"net"
+	"velk/src/utils"
+
+	"github.com/sirupsen/logrus"
 )
 
 type Player struct {
@@ -15,6 +17,8 @@ type Player struct {
 }
 
 func (p Player) SendToPlayer(message string) {
+	cs := utils.ColorService{}.New()
+	message = cs.ProcessString(message)
 	_, err := p.Connection.Write([]byte(message))
 	if err != nil {
 		logrus.Errorf("Player %s: %s", p.Name, err)

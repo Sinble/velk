@@ -3,14 +3,14 @@ package structs
 import "sync"
 
 type Room struct {
-	Id          int
+	ID          int
 	Name        string
 	Description string
 	players     map[int]*Player
-	NorthExitId string
-	EastExitId  string
-	SouthExitId string
-	WestExitId  string
+	NorthExitID string
+	EastExitID  string
+	SouthExitID string
+	WestExitID  string
 	NorthExit   *Room
 	EastExit    *Room
 	SouthExit   *Room
@@ -18,17 +18,17 @@ type Room struct {
 	playerMutex sync.Mutex
 }
 
-func (r Room) New(id int) Room {
+func (r Room) New(id int) *Room {
 
-	room := Room{
-		Id:          id,
+	room := &Room{
+		ID:          id,
 		Name:        "A room",
 		Description: "A plain looking room",
 		players:     make(map[int]*Player, 0),
-		NorthExitId: "",
-		EastExitId:  "",
-		SouthExitId: "",
-		WestExitId:  "",
+		NorthExitID: "",
+		EastExitID:  "",
+		SouthExitID: "",
+		WestExitID:  "",
 		NorthExit:   nil,
 		EastExit:    nil,
 		SouthExit:   nil,

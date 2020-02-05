@@ -36,10 +36,10 @@ func (repository *WorldRepository) CreateZone(creator string) *structs.Zone {
 }
 
 func (repository *WorldRepository) CreateRoom(zoneId int) *structs.Room {
-	roomId := len(infrastructure.Zones[zoneId].Rooms) + 1
-	room := structs.Room{}.New(roomId)
-	infrastructure.Zones[zoneId].Rooms[roomId] = &room
-	return &room
+	roomID := len(infrastructure.Zones[zoneId].Rooms) + 1
+	room := structs.Room{}.New(roomID)
+	infrastructure.Zones[zoneId].Rooms[roomID] = room
+	return room
 }
 
 func (repository *WorldRepository) GetRoom(id string) (*structs.Room, error) {
