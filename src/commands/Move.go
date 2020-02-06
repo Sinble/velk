@@ -10,13 +10,17 @@ type Move struct {
 }
 
 func (move *Move) Action(player *structs.Player, command string, commandOptions ...string) {
+	if player.State == "FIGHTING" {
+		player.SendToPlayer("How are you suppose to do that your fighting!\r\n")
+		return
+	}
 	switch command {
 	case "north":
 		if player.Room.NorthExit != nil {
 			player.Room.RemovePlayer(player)
 			player.Room.NorthExit.AddPlayer(player)
 			player.Room = player.Room.NorthExit
-			CmdLook(player)
+			LookAtRoom(player)
 		} else {
 			player.SendToPlayer("You smash your face into a wall\r\n")
 		}
@@ -26,7 +30,7 @@ func (move *Move) Action(player *structs.Player, command string, commandOptions 
 			player.Room.RemovePlayer(player)
 			player.Room.EastExit.AddPlayer(player)
 			player.Room = player.Room.EastExit
-			CmdLook(player)
+			LookAtRoom(player)
 		} else {
 			player.SendToPlayer("You smash your face into a wall\r\n")
 		}
@@ -36,7 +40,7 @@ func (move *Move) Action(player *structs.Player, command string, commandOptions 
 			player.Room.RemovePlayer(player)
 			player.Room.SouthExit.AddPlayer(player)
 			player.Room = player.Room.SouthExit
-			CmdLook(player)
+			LookAtRoom(player)
 		} else {
 			player.SendToPlayer("You smash your face into a wall\r\n")
 		}
@@ -46,7 +50,7 @@ func (move *Move) Action(player *structs.Player, command string, commandOptions 
 			player.Room.RemovePlayer(player)
 			player.Room.WestExit.AddPlayer(player)
 			player.Room = player.Room.WestExit
-			CmdLook(player)
+			LookAtRoom(player)
 		} else {
 			player.SendToPlayer("You smash your face into a wall\r\n")
 		}

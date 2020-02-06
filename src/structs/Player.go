@@ -2,6 +2,7 @@ package structs
 
 import (
 	"bufio"
+	"fmt"
 	"net"
 	"velk/src/utils"
 
@@ -14,6 +15,11 @@ type Player struct {
 	Connection net.Conn
 	Reader *bufio.Reader
 	Room *Room
+	State string
+	Targets []*Mob
+
+	Health int
+	MaxHealth int
 }
 
 func (p Player) SendToPlayer(message string) {
@@ -31,4 +37,8 @@ func (p Player) ReadFromPlayer() (string, error) {
 		return "", err
 	}
 	return message[:len(message)-2], nil
+}
+
+func(p Player) SendPlayerPrompt() {
+	p.SendToPlayer(fmt.Sprintf("Health: %d/%d >", p.Health, p.MaxHealth))
 }

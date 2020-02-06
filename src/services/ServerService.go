@@ -36,6 +36,12 @@ func (serverService *ServerService) Init() {
 	room2 := serverService.WorldRepository.CreateRoom(zone.Id)
 	room1.NorthExit = room2
 	room2.SouthExit = room1
+	room1.AddMob(&structs.Mob{
+		Id:    0,
+		Name:  "Joe",
+		Room:  room1,
+		State: "STANDING",
+	})
 
 }
 
@@ -64,6 +70,8 @@ func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 	}
 
 	player.Name = name
+	player.Health = 10
+	player.MaxHealth = 10
 	serverService.PlayerService.SendToAllPlayers(fmt.Sprintf("%s has joined the server\r\n", player.Name))
 	serverService.PlayerService.AddPlayer(player)
 	room, err := serverService.WorldRepository.GetRoom("1-1")
@@ -72,6 +80,8 @@ func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 	}
 	player.Room = room
 	room.AddPlayer(player)
+	//commands.LookAtRoom(player)
+	player.SendPlayerPrompt()
 	//Room.AddPlayer(player)
 	for {
 		commandString, err := player.ReadFromPlayer()
@@ -99,6 +109,8 @@ func (serverService *ServerService) CommandConsumer() {
 		} else {
 			command.Player.SendToPlayer("Huh?\r\n")
 		}
+
+		command.Player.SendPlayerPrompt()
 
 	}
 }
