@@ -22,6 +22,7 @@ func main() {
 	infrastructure.CommandList["south"] = &commands.Move{}
 	infrastructure.CommandList["west"] = &commands.Move{}
 	infrastructure.CommandList["kill"] = &commands.Kill{}
+	infrastructure.CommandList["autoattack"] = &commands.AutoAttack{}
 
 	infrastructure.Server = &structs.Server{}
 	serviceService := services.ServerService{}

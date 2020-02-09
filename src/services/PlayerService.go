@@ -1,8 +1,12 @@
 package services
 
 import (
+	"time"
+	"velk/src/infrastructure"
 	"velk/src/repositories"
 	"velk/src/structs"
+
+	"github.com/sirupsen/logrus"
 )
 
 type PlayerService struct {
@@ -26,8 +30,6 @@ func (service PlayerService) AddPlayer(player *structs.Player) error {
 	return service.PlayerRepository.AddPlayer(player)
 }
 
-
-
 func (service PlayerService) SendToAllPlayers(message string) error {
 
 	players, err := service.GetPlayers()
@@ -40,6 +42,31 @@ func (service PlayerService) SendToAllPlayers(message string) error {
 	return nil
 }
 
+func(service PlayerService) waitFight(player *structs.Player) {
+	logrus.Debug("here")
+	for range player.FightChannel {
+		logrus.Debug("here1")
+		service.Fighting(player)
+	}
+}
+
+func(service PlayerService) Fighting(player *structs.Player) {
+
+	duration := 1
+	for true {
+		select {
+		case command := <-player.FightQueue:
+			infrastructure.Server.PlayerCommandChannel <- command
+		default:
+			infrastructure.Server.PlayerCommandChannel <- structs.Command{Player: player, CommandName:"autoattack", CommandSuffix: ""}
+		}
+		
+		time.Sleep(time.Duration(duration) * time.Second)
+		if player.State != "FIGHTING" {
+			break
+		}
+	}
+}
 
 
 

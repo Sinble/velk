@@ -18,6 +18,7 @@ func (a *Kill) Action(player *structs.Player, command string, commandOptions ...
 				if mob != nil {
 					player.State = "FIGHTING"
 					player.Targets = append(player.Targets, mob)
+					player.FightChannel <- true
 					mob.Targets = append(mob.Targets, player)
 					mob.State = "FIGHTING"
 					lock.Unlock()

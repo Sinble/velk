@@ -17,6 +17,8 @@ type Player struct {
 	Room *Room
 	State string
 	Targets []*Mob
+	FightChannel chan bool
+	FightQueue chan Command
 
 	Health int
 	MaxHealth int

@@ -53,7 +53,7 @@ func (serverService *ServerService) ConnectionLoop() {
 			logrus.Error(err)
 			return
 		}
-		player := &structs.Player{Connection: connection, Reader:bufio.NewReader(connection)}
+		player := &structs.Player{Connection: connection, Reader:bufio.NewReader(connection), FightQueue: make(chan structs.Command), FightChannel: make(chan bool)}
 
 		go serverService.PlayerGameLoop(player)
 	}
@@ -74,6 +74,7 @@ func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 	player.MaxHealth = 10
 	serverService.PlayerService.SendToAllPlayers(fmt.Sprintf("%s has joined the server\r\n", player.Name))
 	serverService.PlayerService.AddPlayer(player)
+	go serverService.PlayerService.waitFight(player)
 	room, err := serverService.WorldRepository.GetRoom("1-1")
 	if err !=nil {
 		logrus.Error(err)
