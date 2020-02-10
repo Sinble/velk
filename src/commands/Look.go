@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"strings"
+	"velk/src/interfaces"
 	"velk/src/services"
 	"velk/src/structs"
 )
@@ -11,7 +12,8 @@ type Look struct {
 	PlayerService services.PlayerService
 }
 
-func (a *Look) Action(player *structs.Player, command string, commandOptions ...string) {
+func (a *Look) Action(playerInterface interfaces.PlayerInterface, command string, commandOptions ...string) {
+	player := playerInterface.(*structs.Player)
 	if commandOptions[0] != "" {
 		for id, mob := range player.Room.GetMobs() {
 			if strings.Contains(mob.Name, commandOptions[0]) {

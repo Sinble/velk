@@ -10,3 +10,16 @@ type Mob struct {
 	Health int
 	MaxHealth int
 }
+
+func (mob Mob) SendToPlayer(message string) {
+
+}
+
+func (mob Mob) ReadFromPlayer() (string, error) {
+
+	return "", nil
+}
+
+func(mob Mob) SendPlayerPrompt() {
+
+}

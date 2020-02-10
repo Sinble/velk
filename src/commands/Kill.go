@@ -2,6 +2,7 @@ package commands
 
 import (
 	"strings"
+	"velk/src/interfaces"
 	"velk/src/services"
 	"velk/src/structs"
 )
@@ -10,7 +11,8 @@ type Kill struct {
 	PlayerService services.PlayerService
 }
 
-func (a *Kill) Action(player *structs.Player, command string, commandOptions ...string) {
+func (a *Kill) Action(playerInterface interfaces.PlayerInterface, command string, commandOptions ...string) {
+	player := playerInterface.(*structs.Player)
 	if commandOptions[0] != "" {
 		for id, mob := range player.Room.GetMobs() {
 			if strings.Contains(mob.Name, commandOptions[0]) {

@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"velk/src/interfaces"
 	"velk/src/services"
 	"velk/src/structs"
 )
@@ -11,8 +12,9 @@ type Who struct {
 	PlayerService services.PlayerService
 }
 
-func (who *Who) Action(player *structs.Player, command string, commandOptions ...string) {
-	players, err := who.PlayerService.GetPlayers()
+func (a *Who) Action(playerInterface interfaces.PlayerInterface, command string, commandOptions ...string) {
+	player := playerInterface.(*structs.Player)
+	players, err := a.PlayerService.GetPlayers()
 	if err != nil {
 		logrus.Error(err)
 	}

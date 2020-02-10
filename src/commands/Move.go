@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"velk/src/interfaces"
 	"velk/src/services"
 	"velk/src/structs"
 )
@@ -9,11 +10,13 @@ type Move struct {
 	PlayerService services.PlayerService
 }
 
-func (move *Move) Action(player *structs.Player, command string, commandOptions ...string) {
+func (a *Move) Action(playerInterface interfaces.PlayerInterface, command string, commandOptions ...string) {
+	player := playerInterface.(*structs.Player)
 	if player.State == "FIGHTING" {
 		player.SendToPlayer("How are you suppose to do that your fighting!\r\n")
 		return
 	}
+
 	switch command {
 	case "north":
 		if player.Room.NorthExit != nil {
