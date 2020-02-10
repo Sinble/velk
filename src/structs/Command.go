@@ -1,7 +1,8 @@
 package structs
+import "velk/src/interfaces"
 
 type Command struct {
-	Player        *Player
+	Player        interfaces.PlayerInterface
 	CommandName   string
 	CommandSuffix string
 }

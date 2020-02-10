@@ -61,8 +61,8 @@ func (serverService *ServerService) ConnectionLoop() {
 
 func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 
-	player.SendToPlayer("Welcome to Velk\r\nWhat is thy name?")
-	name, err := player.ReadFromPlayer()
+	serverService.PlayerService.SendToPlayer(player, "Welcome to Velk\r\nWhat is thy name?")
+	name, err := serverService.PlayerService.ReadFromPlayer(player)
 
 	if err != nil {
 		logrus.Error("Failed to read name", err)
@@ -82,10 +82,10 @@ func (serverService *ServerService) PlayerGameLoop(player *structs.Player) {
 	player.Room = room
 	room.AddPlayer(player)
 	//commands.LookAtRoom(player)
-	player.SendPlayerPrompt()
+	serverService.PlayerService.SendPlayerPrompt(player)
 	//Room.AddPlayer(player)
 	for {
-		commandString, err := player.ReadFromPlayer()
+		commandString, err := serverService.PlayerService.ReadFromPlayer(player)
 
 		if err != nil {
 			logrus.Error("Failed to receive commandName: ", err)
@@ -108,10 +108,10 @@ func (serverService *ServerService) CommandConsumer() {
 		if actionExists {
 			action.Action(command.Player, command.CommandName, command.CommandSuffix)
 		} else {
-			command.Player.SendToPlayer("Huh?\r\n")
+			serverService.PlayerService.SendToPlayer(command.Player, "Huh?\r\n")
 		}
 
-		command.Player.SendPlayerPrompt()
+		serverService.PlayerService.SendPlayerPrompt(command.Player)
 
 	}
 }

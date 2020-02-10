@@ -12,5 +12,6 @@ type AutoAttack struct {
 
 func (a *AutoAttack) Action(player *structs.Player, command string, commandOptions ...string) {
 	player.SendToPlayer(fmt.Sprintf("You punch %s\r\n", player.Targets[0].Name))
+	player.Targets[0].Health -= 1
 	player.State = "STANDING"
 }

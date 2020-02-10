@@ -6,4 +6,7 @@ type Mob struct {
 	Room *Room
 	State string
 	Targets []*Player
+
+	Health int
+	MaxHealth int
 }

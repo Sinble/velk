@@ -1,10 +1,13 @@
 package services
 
 import (
+	"fmt"
 	"time"
 	"velk/src/infrastructure"
+	"velk/src/interfaces"
 	"velk/src/repositories"
 	"velk/src/structs"
+	"velk/src/utils"
 
 	"github.com/sirupsen/logrus"
 )
@@ -37,7 +40,7 @@ func (service PlayerService) SendToAllPlayers(message string) error {
 		return err
 	}
 	for _, player := range players {
-		player.SendToPlayer(message)
+		service.SendToPlayer(player, message)
 	}
 	return nil
 }
@@ -46,10 +49,21 @@ func(service PlayerService) waitFight(player *structs.Player) {
 	logrus.Debug("here")
 	for range player.FightChannel {
 		logrus.Debug("here1")
+		go service.mobAttack(player.Targets[0])
 		service.Fighting(player)
 	}
 }
 
+func (service PlayerService) mobAttack(mob *structs.Mob) {
+	duration := 1
+	for true {
+		infrastructure.Server.PlayerCommandChannel <- structs.Command{Player: mob, CommandName:"autoattack", CommandSuffix: ""}
+		time.Sleep(time.Duration(duration) * time.Second)
+		if mob.State != "FIGHTING" {
+			break
+		}
+	}
+}
 func(service PlayerService) Fighting(player *structs.Player) {
 
 	duration := 1
@@ -68,5 +82,25 @@ func(service PlayerService) Fighting(player *structs.Player) {
 	}
 }
 
+func (service PlayerService) SendToPlayer(player interfaces.PlayerInterface, message string) {
+	cs := utils.ColorService{}.New()
+	message = cs.ProcessString(message)
+	_, err := player.Connection.Write([]byte(message))
+	if err != nil {
+		logrus.Errorf("Player %s: %s", player.Name, err)
+	}
+}
+
+func (service PlayerService) ReadFromPlayer(player *structs.Player) (string, error) {
+	message, err := player.Reader.ReadString('\n')
+	if err != nil {
+		return "", err
+	}
+	return message[:len(message)-2], nil
+}
+
+func(service PlayerService) SendPlayerPrompt(player *structs.Player) {
+	service.SendToPlayer(player, fmt.Sprintf("Health: %d/%d >", player.Health, player.MaxHealth))
+}
 
 
