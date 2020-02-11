@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"net"
+	"velk/src/interfaces"
 	"velk/src/utils"
 )
 
@@ -18,6 +19,7 @@ type Player struct {
 	Targets []*Mob
 	FightChannel chan bool
 	FightQueue chan Command
+	Items		map[int]interfaces.ItemInterface
 
 	Health int
 	MaxHealth int

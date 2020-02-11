@@ -49,12 +49,17 @@ func LookAtRoom(player *structs.Player) {
 		sendMessage += "W "
 	}
 	sendMessage += "&c]&n\r\n"
+	for _, item := range player.Room.Items {
+		sendMessage += fmt.Sprintf("&y%s&n\r\n", item.GetName())
+	}
+
 	for _, player := range player.Room.GetPlayers() {
 		sendMessage += fmt.Sprintf("&y%s&n\r\n", player.Name)
 	}
 	for _, mob := range player.Room.GetMobs() {
 		sendMessage += fmt.Sprintf("&y%s&n\r\n", mob.Name)
 	}
+
 
 	player.SendToPlayer(sendMessage)
 }

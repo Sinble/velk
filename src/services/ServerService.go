@@ -7,6 +7,7 @@ import (
 	"net"
 	"strings"
 	"velk/src/infrastructure"
+	"velk/src/interfaces"
 	"velk/src/repositories"
 	"velk/src/structs"
 )
@@ -44,6 +45,11 @@ func (serverService *ServerService) Init() {
 		Health: 0,
 	})
 
+	room1.Items[0] = &structs.Item{
+		ID: 0,
+		Name: "sword",
+	}
+
 }
 
 func (serverService *ServerService) ConnectionLoop() {
@@ -54,7 +60,7 @@ func (serverService *ServerService) ConnectionLoop() {
 			logrus.Error(err)
 			return
 		}
-		player := &structs.Player{Connection: connection, Reader:bufio.NewReader(connection), FightQueue: make(chan structs.Command), FightChannel: make(chan bool)}
+		player := &structs.Player{Connection: connection, Reader:bufio.NewReader(connection), FightQueue: make(chan structs.Command), FightChannel: make(chan bool), Items: make(map[int]interfaces.ItemInterface)}
 
 		go serverService.PlayerGameLoop(player)
 	}
