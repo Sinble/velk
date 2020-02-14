@@ -11,7 +11,7 @@ type Room struct {
 	Description string
 	players     map[int]*Player
 	mobs		map[int]*Mob
-	Items		map[int]interfaces.ItemInterface
+	Items		map[string]interfaces.ItemInterface
 	NorthExitID string
 	EastExitID  string
 	SouthExitID string
@@ -32,7 +32,7 @@ func (r Room) New(id int) *Room {
 		Description: "A plain looking room",
 		players:     make(map[int]*Player),
 		mobs:		 make(map[int]*Mob),
-		Items:       make(map[int]interfaces.ItemInterface),
+		Items:       make(map[string]interfaces.ItemInterface),
 		NorthExitID: "",
 		EastExitID:  "",
 		SouthExitID: "",

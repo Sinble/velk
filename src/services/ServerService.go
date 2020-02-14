@@ -43,15 +43,15 @@ func (serverService *ServerService) Init() {
 		Room:  room1,
 		State: "STANDING",
 		Health: 0,
-		Items: make(map[int]interfaces.ItemInterface),
+		Items: make(map[string]interfaces.ItemInterface),
 	}
-	mob.Items[3] = &structs.Item{ID: 3, Name: "thing"}
+	item := structs.Item{}.New()
+	item.Name = "thing"
+	mob.Items[item.ID] = item
 	room1.AddMob(mob)
-
-	room1.Items[0] = &structs.Item{
-		ID: 0,
-		Name: "sword",
-	}
+	item2 := structs.Item{}.New()
+	item2.Name = "sword"
+	room1.Items[item2.ID] = item2
 
 }
 
@@ -63,7 +63,7 @@ func (serverService *ServerService) ConnectionLoop() {
 			logrus.Error(err)
 			return
 		}
-		player := &structs.Player{Connection: connection, Reader:bufio.NewReader(connection), FightQueue: make(chan structs.Command), FightChannel: make(chan bool), Items: make(map[int]interfaces.ItemInterface)}
+		player := &structs.Player{Connection: connection, Reader:bufio.NewReader(connection), FightQueue: make(chan structs.Command), FightChannel: make(chan bool), Items: make(map[string]interfaces.ItemInterface)}
 
 		go serverService.PlayerGameLoop(player)
 	}

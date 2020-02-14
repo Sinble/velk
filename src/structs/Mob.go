@@ -8,7 +8,7 @@ type Mob struct {
 	Room *Room
 	State string
 	Targets []*Player
-	Items		map[int]interfaces.ItemInterface
+	Items		map[string]interfaces.ItemInterface
 
 	Health int
 	MaxHealth int

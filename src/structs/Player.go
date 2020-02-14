@@ -19,7 +19,7 @@ type Player struct {
 	Targets []*Mob
 	FightChannel chan bool
 	FightQueue chan Command
-	Items		map[int]interfaces.ItemInterface
+	Items		map[string]interfaces.ItemInterface
 
 	Health int
 	MaxHealth int

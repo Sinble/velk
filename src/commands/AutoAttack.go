@@ -5,6 +5,7 @@ import (
 	"velk/src/interfaces"
 	"velk/src/services"
 	"velk/src/structs"
+	"velk/src/utils"
 )
 
 type AutoAttack struct {
@@ -21,30 +22,30 @@ func (a *AutoAttack) Action(playerInterface interfaces.PlayerInterface, command 
 		player.Targets[0].Health -= 1
 		if player.Targets[0].Health <= 0 {
 			death(player.Targets[0])
-			player.State = "STANDING"
+			player.State = utils.STANDING
 		}
 
 	case *structs.Mob:
 		player := playerInterface.(*structs.Mob)
-		if player.State != "FIGHTING" {
+		if player.State != utils.FIGHTING {
 			break
 		}
 		player.Targets[0].SendToPlayer(fmt.Sprintf("%s punches you\r\n", player.Name))
 		player.Targets[0].Health -= 1
 
-		player.State = "STANDING"
+		player.State = utils.STANDING
 	}
 }
 
 func death(mob *structs.Mob) {
-	mob.State = "DEAD"
+	mob.State = utils.DEAD
 	mob.Targets = mob.Targets[:0]
 	mob.Room.RemoveMob(mob)
-	mob.Room.Items[1] = &structs.Container{
-		ID: 1,
-		Name: "corpse",
-		Items: mob.Items,
-	}
+	corpse := structs.Container{}.New()
+	corpse.Name = "corpse"
+	corpse.Items = mob.Items
+	mob.Room.Items[corpse.ID] = corpse
+	
 	mob = nil
 
 }
