@@ -14,6 +14,22 @@ type Look struct {
 
 func (a *Look) Action(playerInterface interfaces.PlayerInterface, command string, commandOptions ...string) {
 	player := playerInterface.(*structs.Player)
+
+	options := strings.Split(commandOptions[0], " ")
+	if len(options) > 1 {
+		if strings.ToLower(options[0]) == "in" {
+			for _, item := range player.Room.Items {
+				if item.GetName() == options[1] {
+					container := item.(*structs.Container)
+					sendMessage := "Items in \r\n"
+					for _, containerItem := range container.Items {
+						sendMessage += fmt.Sprintf("%s\r\n",  containerItem.GetName())
+					}
+					player.SendToPlayer(sendMessage)
+				}
+			}
+		}
+	}
 	if commandOptions[0] != "" {
 		for id, mob := range player.Room.GetMobs() {
 			if strings.Contains(mob.Name, commandOptions[0]) {

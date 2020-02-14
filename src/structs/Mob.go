@@ -1,11 +1,14 @@
 package structs
 
+import "velk/src/interfaces"
+
 type Mob struct {
 	Id int
 	Name string
 	Room *Room
 	State string
 	Targets []*Player
+	Items		map[int]interfaces.ItemInterface
 
 	Health int
 	MaxHealth int

@@ -26,6 +26,9 @@ func (a *AutoAttack) Action(playerInterface interfaces.PlayerInterface, command 
 
 	case *structs.Mob:
 		player := playerInterface.(*structs.Mob)
+		if player.State != "FIGHTING" {
+			break
+		}
 		player.Targets[0].SendToPlayer(fmt.Sprintf("%s punches you\r\n", player.Name))
 		player.Targets[0].Health -= 1
 
@@ -37,5 +40,11 @@ func death(mob *structs.Mob) {
 	mob.State = "DEAD"
 	mob.Targets = mob.Targets[:0]
 	mob.Room.RemoveMob(mob)
+	mob.Room.Items[1] = &structs.Container{
+		ID: 1,
+		Name: "corpse",
+		Items: mob.Items,
+	}
 	mob = nil
+
 }

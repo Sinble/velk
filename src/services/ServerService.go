@@ -37,13 +37,16 @@ func (serverService *ServerService) Init() {
 	room2 := serverService.WorldRepository.CreateRoom(zone.Id)
 	room1.NorthExit = room2
 	room2.SouthExit = room1
-	room1.AddMob(&structs.Mob{
+	mob := &structs.Mob{
 		Id:    0,
 		Name:  "Joe",
 		Room:  room1,
 		State: "STANDING",
 		Health: 0,
-	})
+		Items: make(map[int]interfaces.ItemInterface),
+	}
+	mob.Items[3] = &structs.Item{ID: 3, Name: "thing"}
+	room1.AddMob(mob)
 
 	room1.Items[0] = &structs.Item{
 		ID: 0,

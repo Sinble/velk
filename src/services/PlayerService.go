@@ -54,11 +54,11 @@ func(service PlayerService) waitFight(player *structs.Player) {
 func (service PlayerService) mobAttack(mob *structs.Mob) {
 	duration := 1
 	for true {
-		infrastructure.Server.PlayerCommandChannel <- structs.Command{Player: mob, CommandName:"autoattack", CommandSuffix: ""}
-		time.Sleep(time.Duration(duration) * time.Second)
 		if mob.State != "FIGHTING" {
 			break
 		}
+		infrastructure.Server.PlayerCommandChannel <- structs.Command{Player: mob, CommandName:"autoattack", CommandSuffix: ""}
+		time.Sleep(time.Duration(duration) * time.Second)
 	}
 }
 func(service PlayerService) Fighting(player *structs.Player) {
